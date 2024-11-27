@@ -3,3 +3,11 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+client_prenom:
+  path: /client/prenom/{prenom}
+  controller: App\Controller\ClientController::info
+
+route_image:
+  path: /img/home
+  controller: App\Controller\ImageController::home
