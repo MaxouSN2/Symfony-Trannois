@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ClientController extends AbstractController
 {
-    #[Route('/client/prenom/{prenom}', name: 'client_prenom')]
+    #[Route('/client/prenom/{prenom}', name: 'client_prenom', requirements: ['prenom' => '^[a-zA-Z]+(-[a-zA-Z]+)*$'])]
     public function info(string $prenom): Response
     {
         // Liste des clients pour l'exemple
@@ -20,15 +20,19 @@ class ClientController extends AbstractController
             'zouhir' => ['Zouhir KRIM'],
             'maxime' => ['LEBRUN Maxime'],
             'mathieu' => ['Mathieu BROGLY']
-           
-      
-            
         ];
 
         // Vérifie si le prénom existe dans la liste des clients
         $result = $clients[strtolower($prenom)] ?? [];
-        
-        // Retourne la réponse
+
+        // Si aucun client trouvé, renvoyer un message alternatif
+        if (empty($result)) {
+            return new Response(
+                'Aucune personne dans la base de donnée avec le prénom "' . htmlspecialchars($prenom) . '".'
+            );
+        }
+
+        // Retourne la réponse avec les clients trouvés
         return new Response(
             'Clients avec le prénom "' . htmlspecialchars($prenom) . '" : ' . implode(', ', $result)
         );

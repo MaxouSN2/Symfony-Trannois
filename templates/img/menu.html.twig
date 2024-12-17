@@ -1,7 +1,7 @@
 <ul class="list-group">
     {% for image in images %}
         <li class="list-group-item">
-            <a href="{{ path('img_data', { imageName: image }) }}" target="_blank">{{ image }}</a>
+            <a href="{{ path('img_download', { imageName: image }) }}" target="_blank">{{ image }}</a>
         </li>
     {% else %}
         <li class="list-group-item text-muted">Aucune image disponible</li>

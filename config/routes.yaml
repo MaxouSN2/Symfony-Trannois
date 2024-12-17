@@ -7,6 +7,9 @@ controllers:
 client_prenom:
   path: /client/prenom/{prenom}
   controller: App\Controller\ClientController::info
+  requirements:
+        prenom: '^[a-zA-Z]+(-[a-zA-Z]+)*$'
+
 
 route_image:
   path: /img/home
