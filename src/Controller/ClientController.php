@@ -14,7 +14,7 @@ class ClientController extends AbstractController
     {
         // Liste des clients pour l'exemple
         $clients = [
-            'rene' => ['Rene Dupres', 'Rene Dupont'],
+            'rene' => ['Rene Dupres', 'Rene Dupond'],
             'jacqueline' => ['Jacqueline Dubois'],
             'marie' => ['Marie Lefevre', 'Marie-Claude Lefevre'],
             'zouhir' => ['Zouhir KRIM'],
