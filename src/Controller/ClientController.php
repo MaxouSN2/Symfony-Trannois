@@ -4,7 +4,7 @@
 namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route; // Vous n'avez plus besoin de cette ligne si vous utilisez des attributs
+use Symfony\Component\Routing\Annotation\Route; 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ClientController extends AbstractController
@@ -37,4 +37,5 @@ class ClientController extends AbstractController
             'Clients avec le prénom "' . htmlspecialchars($prenom) . '" : ' . implode(', ', $result)
         );
     }
+
 }
