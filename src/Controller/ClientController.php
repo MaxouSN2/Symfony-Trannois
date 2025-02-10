@@ -1,10 +1,10 @@
 <?php
 
-// src/Controller/ClientController.php
 namespace App\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route; 
+use Symfony\Component\Routing\Annotation\Route; // Vous n'avez plus besoin de cette ligne si vous utilisez des attributs
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ClientController extends AbstractController
@@ -38,4 +38,17 @@ class ClientController extends AbstractController
         );
     }
 
+  // 2 méthodes dans mon fichier ClientController.php
+
+public function index(Request $request): Response
+{
+    $this->render('home/index.html.twig');
+
+    return new Response('La route est accessible.');
+}
+
+public function ferme(): Response
+{
+    return new Response('Le site est fermé.', Response::HTTP_FORBIDDEN);
+}
 }

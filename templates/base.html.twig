@@ -30,6 +30,21 @@
                             {{ render(controller('App\\Controller\\ImageController::menu')) }}
                         </ul>
                     </li>
+                    {% if app.session.get('connect') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_logout') }}">Se déconnecter</a>
+                        </li>
+                        <li class="nav-item">
+                            <span class="nav-link">Bienvenue, {{ app.session.get('email') }}</span>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_login') }}">Se connecter</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_register') }}">S'inscrire</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
