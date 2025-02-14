@@ -20,16 +20,7 @@
                         <a class="nav-link" href="/">Accueil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/img/home">Site Image</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Images
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            {{ render(controller('App\\Controller\\ImageController::menu')) }}
-                        </ul>
-                    </li>
+                        <a class="nav-link" href="/stockage">Site Stockage</a>
                     {% if app.session.get('connect') %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('app_logout') }}">Se déconnecter</a>

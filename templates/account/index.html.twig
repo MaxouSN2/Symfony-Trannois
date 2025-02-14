@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon compte{% endblock %}
+
+{% block body %}
+    <h1>Mon compte</h1>
+
+    <p>Espace utilisé : {{ usedSpace }} Mo</p>
+    <p>Espace restant : {{ remainingSpace }} Mo</p>
+
+    <h2>Mes dossiers</h2>
+    {% for folder in user.folders %}
+        <h3>{{ folder.name }} ({{ folder.files|length }} fichier(s))</h3>
+        {% if folder.files|length > 0 %}
+            <ul>
+                {% for file in folder.files %}
+                    <li>
+                        {{ file.name }} ({{ file.size }} Mo) - Téléchargé le {{ file.uploadDate|date('d/m/Y H:i') }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Aucun fichier dans ce dossier.</p>
+        {% endif %}
+    {% else %}
+        <p>Aucun dossier pour cet utilisateur.</p>
+    {% endfor %}
+{% endblock %}

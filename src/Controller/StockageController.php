@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 use Psr\Log\LoggerInterface;  
 
-class ImageController extends AbstractController
+class StockageController extends AbstractController
 {
     private LoggerInterface $logger;
 
@@ -22,53 +22,6 @@ class ImageController extends AbstractController
     public function home(): Response
     {
         return $this->render('img/home.html.twig');
-    }
-
-   
-    #[Route('/img/data/{imageName}', name: 'img_data')]
-    public function affiche(string $imageName): Response
-    {
-        
-        $imagePath = $this->getParameter('kernel.project_dir') . '/images/' . $imageName . '.jpg';
-
-        
-        if (!file_exists($imagePath)) {
-            return new Response('Image inexistante, recommence ! Et ajoute image dans le dossier images !', Response::HTTP_NOT_FOUND);
-        }
-
-       
-        $imageData = file_get_contents($imagePath);
-
-        
-        $response = new Response($imageData);
-        $response->headers->set('Content-Type', 'image/jpeg');
-
-        return $response;
-    }
-
-    
-    public function menu(): Response
-    {
-        
-        $imageDir = $this->getParameter('kernel.project_dir') . '/images/';
-        $images = [];
-
-      
-        if (is_dir($imageDir)) {
-            $files = scandir($imageDir);
-
-      
-            foreach ($files as $file) {
-                if (!is_dir($imageDir . $file) && preg_match('/\.(jpg|jpeg|png|gif)$/i', $file)) {
-                    $images[] = pathinfo($file, PATHINFO_FILENAME);
-                }
-            }
-        }
-
-       
-        return $this->render('img/menu.html.twig', [
-            'images' => $images,
-        ]);
     }
 
 

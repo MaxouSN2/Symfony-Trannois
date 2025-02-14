@@ -9,9 +9,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Form\FormError;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -24,12 +25,15 @@ class RegistrationController extends AbstractController
     {
         $data = [
             'email' => '',
+            'name' => '',
             'password' => '',
             'confirmPassword' => '',
+            'plan' => '1Mo', // Valeur par défaut
         ];
 
+        // Création du formulaire avec un champ pour la formule
         $form = $this->createFormBuilder($data, [
-                'csrf_protection' => false, // Désactivation de la vérification CSRF
+                'csrf_protection' => true, // Protection CSRF activée
             ])
             ->add('email', EmailType::class, [
                 'label' => $translator->trans('E-mail'),
@@ -37,14 +41,16 @@ class RegistrationController extends AbstractController
                     new NotBlank(['message' => $translator->trans('Veuillez saisir un e-mail.')]),
                 ]
             ])
+            ->add('name', TextType::class, [
+                'label' => $translator->trans('Nom'),
+                'constraints' => [
+                    new NotBlank(['message' => $translator->trans('Veuillez saisir un nom.')]),
+                ]
+            ])
             ->add('password', PasswordType::class, [
                 'label' => $translator->trans('Mot de passe'),
                 'constraints' => [
                     new NotBlank(['message' => $translator->trans('Veuillez saisir un mot de passe.')]),
-                    new Regex([
-                        'pattern' => '/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/',
-                        'message' => $translator->trans('Le mot de passe doit contenir des majuscules, des minuscules, des chiffres et des caractères spéciaux'),
-                    ]),
                 ]
             ])
             ->add('confirmPassword', PasswordType::class, [
@@ -53,30 +59,46 @@ class RegistrationController extends AbstractController
                     new NotBlank(['message' => $translator->trans('Veuillez confirmer votre mot de passe.')]),
                 ]
             ])
+            ->add('plan', ChoiceType::class, [
+                'label' => $translator->trans('Choisir une formule'),
+                'choices' => [
+                    '1 Mo' => '1Mo',
+                    '10 Mo' => '10Mo',
+                    '100 Mo' => '100Mo',
+                ],
+                'constraints' => [
+                    new NotBlank(['message' => $translator->trans('Veuillez choisir une formule.')]),
+                ]
+            ])
             ->add('submit', SubmitType::class, ['label' => $translator->trans('S\'inscrire')])
             ->getForm();
 
         $form->handleRequest($request);
 
+        // Si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData(); // Récupérer les données soumises après validation
+            $data = $form->getData(); // Récupérer les données soumises
 
+            // Vérifier que les mots de passe correspondent
             if ($data['password'] !== $data['confirmPassword']) {
                 $form->get('confirmPassword')->addError(new FormError($translator->trans('Les mots de passe ne correspondent pas')));
             }
 
+            // Si le formulaire est valide et les mots de passe correspondent
             if ($form->isValid() && $data['password'] === $data['confirmPassword']) {
                 // Création de l'utilisateur
                 $user = new User();
                 $user->setEmail($data['email']);
+                $user->setName($data['name']);
+                $user->setPlan($data['plan']);  // Enregistrement de la formule choisie
 
                 // Hachage du mot de passe
-                $hashedPassword = $passwordHasher->hashPassword($user, $data['password']);
-                $user->setPassword($hashedPassword);
+                //$hashedPassword = $passwordHasher->hashPassword($user, $data['password']);
+               // $user->setPassword($hashedPassword);
 
                 // Sauvegarde de l'utilisateur dans la base de données
-                $entityManager->persist($user);
-                $entityManager->flush();
+                //$entityManager->persist($user);
+                //$entityManager->flush();
 
                 // Redirection vers la page de succès
                 return $this->redirectToRoute('app_register_success', ['login' => $data['email']]);

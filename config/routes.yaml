@@ -12,7 +12,11 @@ client_prenom:
 
 
 route_image:
-  path: /img/home
-  controller: App\Controller\ImageController::home
+  path: /stockage
+  controller: App\Controller\StockageController::home
+
+route_home:
+  path: /
+  controller: App\Controller\DefaultController::redirectToStockage
 
 

@@ -2,39 +2,31 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
-/**
- * @ORM\Entity(repositoryClass="App\Repository\FileRepository")
- */
 class File
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
-     * @ORM\Column(type="string")
-     */
     private $name;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
     private $size;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
     private $uploadDate;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="files")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
+    public function __construct($name, $size)
+    {
+        $this->name = $name;
+        $this->size = $size; // La taille en Mo par exemple
+        $this->uploadDate = new \DateTime();
+    }
 
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getSize(): float
+    {
+        return $this->size;
+    }
+
+    public function getUploadDate(): \DateTime
+    {
+        return $this->uploadDate;
+    }
 }
